@@ -1,0 +1,12 @@
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.fieldGroup {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
