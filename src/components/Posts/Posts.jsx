@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { getAllPosts } from 'api/posts';
+import { getAllPosts } from 'api/images';
 
 import styles from './posts.module.css';
 

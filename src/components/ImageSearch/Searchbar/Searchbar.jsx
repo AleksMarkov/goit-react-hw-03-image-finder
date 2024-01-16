@@ -1,8 +1,8 @@
 import { Component } from 'react';
 
-import styles from './post-search-form.module.css';
+import styles from './search-bar.module.css';
 
-class PostSearchForm extends Component {
+class Searchbar extends Component {
   state = {
     search: '',
   };
@@ -14,7 +14,6 @@ class PostSearchForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    //   this.props.onSubmit({ ...this.state });
     this.props.onSubmit({ search: this.state.search });
     this.setState({ search: '' });
   };
@@ -23,22 +22,25 @@ class PostSearchForm extends Component {
     const { handleChange, handleSubmit } = this;
     const { search } = this.state;
     return (
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.fieldGroup}>
-          <label>Enter search phrase</label>
+      <header className={styles.searchbar}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <button type="submit" className={styles.button}>
+            <span className={styles.label}>Search</span>
+          </button>
           <input
+            className={styles.input}
             value={search}
             onChange={handleChange}
             type="text"
             name="search"
-            required
-            placeholder="Enter search phrase"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
           />
-        </div>
-        <button type="submit">Search</button>
-      </form>
+        </form>
+      </header>
     );
   }
 }
 
-export default PostSearchForm;
+export default Searchbar;

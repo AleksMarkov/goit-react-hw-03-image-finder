@@ -1,11 +1,13 @@
-import PostsSearch from 'components/PostSearch/PostsSearch';
-import Posts from 'components/Posts/Posts';
+import ImageSearch from './components/ImageSearch/ImageSearch';
+
+import styles from './app.module.css';
+// import Posts from 'components/Posts/Posts';
 
 export const App = () => {
   return (
-    <div>
+    <div className={styles.app}>
       {/* <Posts /> */}
-      <PostsSearch />
+      <ImageSearch />
     </div>
   );
 };

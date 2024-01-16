@@ -1,16 +1,18 @@
 import { Component } from 'react';
-import { searchPosts } from 'api/posts';
-import PostSearchForm from './PostsSearchForm/PostSearchForm';
-import PostSearchList from './PostSearchList/PostSearchList';
+import { searchImage } from 'api/images';
+import Searchbar from './Searchbar/Searchbar';
+import ImageGallery from './ImageGallery/ImageGallery';
 import Button from 'components/Button/Button';
 import Modal from 'components/Modal/Modal';
+import Loader from 'components/Loader/Loader';
 
-import styles from './posts-search.module.css';
+import styles from './imagesearch.module.css';
 
-class PostsSearch extends Component {
+class ImageSearch extends Component {
   state = {
     search: '',
-    posts: [],
+    totalHits: 0,
+    hits: [],
     loading: false,
     error: null,
     page: 1,
@@ -29,11 +31,14 @@ class PostsSearch extends Component {
     const { search, page } = this.state;
     try {
       this.setState({ loading: true });
-      const { data } = await searchPosts(search, page);
-      this.setState(({ posts }) => ({
-        posts: data?.length ? [...posts, ...data] : posts,
+      const { data } = await searchImage(search, page);
+      this.setState(({ hits }) => ({
+        hits: data.hits?.length ? [...hits, ...data.hits] : hits,
       }));
-      // this.setState({ posts: data?.length ? data : [] });
+      this.setState(() => ({
+        totalHits: data.totalHits ? data.totalHits : 0,
+      }));
+      this.setState({ error: null });
     } catch (error) {
       this.setState({ error: error.message });
     } finally {
@@ -42,25 +47,19 @@ class PostsSearch extends Component {
   }
 
   handleSearch = ({ search }) => {
-    this.setState({ search, posts: [], page: 1 });
+    this.setState({ search, totalHits: 0, hits: [], page: 1 });
   };
-
-  // loadMore = () => {
-  //   this.setState(({ page }) => {
-  //     return { page: page + 1 };
-  //   });
-  // };
 
   loadMore = () => {
     this.setState(({ page }) => ({ page: page + 1 }));
   };
 
-  showModal = ({ title, body }) => {
+  showModal = ({ webformatURL, tags }) => {
     this.setState({
       modalOpen: true,
       postDetails: {
-        title,
-        body,
+        webformatURL,
+        tags,
       },
     });
   };
@@ -74,27 +73,32 @@ class PostsSearch extends Component {
 
   render() {
     const { handleSearch, loadMore, showModal, closeModal } = this;
-    const { posts, loading, error, modalOpen, postDetails } = this.state;
+    const { totalHits, hits, loading, error, modalOpen, postDetails } =
+      this.state;
 
-    const isPosts = Boolean(posts.length);
+    const isImages = Boolean(hits.length);
+    const isTotal = Boolean(totalHits > hits.length);
 
     return (
       <>
-        <PostSearchForm onSubmit={handleSearch} />
+        <Searchbar onSubmit={handleSearch} />
         {error && <p className={styles.error}>ERROR: {error}</p>}
-        {loading && <p>...Loading</p>}
-        {isPosts && <PostSearchList showModal={showModal} items={posts} />}
-        {isPosts && (
+
+        {isImages && <ImageGallery showModal={showModal} items={hits} />}
+        {isTotal && (
           <div className={styles.loadMoreWrapper}>
             <Button type="button" onClick={loadMore}>
               Load more
             </Button>
           </div>
         )}
+        {loading && <Loader />}
         {modalOpen && (
           <Modal close={closeModal}>
-            <h2>{postDetails.title}</h2>
-            <p>{postDetails.body}</p>
+            <img src={postDetails.webformatURL} alt={postDetails.tags} />
+            {/* className={styles.image} src={webformatURL} alt={tags}
+            <h2>{postDetails.tags}</h2>
+            <p>{postDetails.tags}</p> */}
           </Modal>
         )}
       </>
@@ -102,4 +106,4 @@ class PostsSearch extends Component {
   }
 }
 
-export default PostsSearch;
+export default ImageSearch;
