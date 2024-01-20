@@ -88,11 +88,11 @@ class ImageSearch extends Component {
         {isTotal && (
           <div className={styles.loadMoreWrapper}>
             <Button type="button" onClick={loadMore}>
-              {loading ? <Loader /> : 'Load more'}
+              {loading ? <Loader backgroundColor={'#333'} /> : 'Load more'}
             </Button>
           </div>
         )}
-        {loading && <Loader />}
+        {loading && <Loader backgroundColor={'#333'} />}
         {modalOpen && (
           <Modal close={closeModal}>
             <img src={postDetails.webformatURL} alt={postDetails.tags} />
