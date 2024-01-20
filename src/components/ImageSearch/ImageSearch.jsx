@@ -83,7 +83,7 @@ class ImageSearch extends Component {
       <>
         <Searchbar onSubmit={handleSearch} />
         {error && <p className={styles.error}>ERROR: {error}</p>}
-
+        {loading && <Loader />}
         {isImages && <ImageGallery showModal={showModal} items={hits} />}
         {isTotal && (
           <div className={styles.loadMoreWrapper}>
@@ -92,7 +92,7 @@ class ImageSearch extends Component {
             </Button>
           </div>
         )}
-        {loading && <Loader backgroundColor={'#333'} />}
+
         {modalOpen && (
           <Modal close={closeModal}>
             <img src={postDetails.webformatURL} alt={postDetails.tags} />
