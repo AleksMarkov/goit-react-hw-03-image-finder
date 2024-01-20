@@ -88,7 +88,7 @@ class ImageSearch extends Component {
         {isTotal && (
           <div className={styles.loadMoreWrapper}>
             <Button type="button" onClick={loadMore}>
-              Load more
+              {loading ? <Loader /> : 'Load more'}
             </Button>
           </div>
         )}
